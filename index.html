@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Printer Volume Compare</title>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+  <div class="page" id="page">
+    <aside id="sidebar">
+      <div>
+        <h1>3D Build Volume Compare</h1>
+        <p>Each box is scaled 1:1 in millimeters. Z is vertical, boxes rest on the build plate, and all printers share the same world space.</p>
+      </div>
+
+      <div class="panel-card legend">
+        <span><span class="swatch" style="background:#ff5555"></span>X axis</span>
+        <span><span class="swatch" style="background:#55ff55"></span>Y axis</span>
+        <span><span class="swatch" style="background:#5599ff"></span>Z axis</span>
+      </div>
+
+      <div class="panel-card search">
+        <label for="printer-search">Search printers</label>
+        <input id="printer-search" type="search" placeholder="Type name or brand..." autocomplete="off" />
+      </div>
+
+      <div class="panel-card custom-form">
+        <div class="row">
+          <label for="custom-name">Name</label>
+          <input id="custom-name" type="text" placeholder="Custom printer" />
+        </div>
+        <div class="row triple">
+          <label>X (mm)<input id="custom-x" type="number" min="1" placeholder="200" /></label>
+          <label>Y (mm)<input id="custom-y" type="number" min="1" placeholder="200" /></label>
+          <label>Z (mm)<input id="custom-z" type="number" min="1" placeholder="200" /></label>
+        </div>
+        <div class="row">
+          <label>Color<input id="custom-color" type="color" value="#4da3ff" /></label>
+          <button id="custom-add">Add</button>
+        </div>
+      </div>
+
+      <div class="panel-card printer-list" id="printer-list"></div>
+
+      <div class="note">
+        Tips: Use scroll or right-drag to zoom/rotate. Checkboxes toggle visibility. Volume shown in liters (1 mm^3 = 1e-6 L).
+      </div>
+    </aside>
+
+    <section class="viewport">
+      <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">&#9776;</button>
+      <div id="scene" aria-label="3D scene showing printer build volumes"></div>
+      <div id="gizmo" aria-label="Orientation helper"></div>
+      <button class="settings-btn" id="settings-btn" aria-label="Settings">&#9881;</button>
+      <div class="settings-panel" id="settings-panel">
+        <label><span>Show axes</span><input type="checkbox" id="toggle-axes" /></label>
+        <label><span>Show Benchy</span><input type="checkbox" id="toggle-benchy" checked /></label>
+        <label class="color-row"><span>Benchy color</span><input type="color" id="benchy-color" value="#ff8a3d" /></label>
+        <label><span>Align volumes</span>
+          <select id="align-mode">
+            <option value="center">Center overlap</option>
+            <option value="row-x">Row (X offset)</option>
+            <option value="corner">Corner-aligned overlap</option>
+          </select>
+        </label>
+      </div>
+    </section>
+  </div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.161/build/three.module.js",
+        "three/examples/jsm/controls/OrbitControls.js": "https://cdn.jsdelivr.net/npm/three@0.161/examples/jsm/controls/OrbitControls.js",
+        "three/examples/jsm/loaders/STLLoader.js": "https://cdn.jsdelivr.net/npm/three@0.161/examples/jsm/loaders/STLLoader.js"
+      }
+    }
+  </script>
+  <script type="module" src="scripts/main.js"></script>
+</body>
+</html>
