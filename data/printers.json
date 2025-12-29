@@ -1,0 +1,86 @@
+[
+  {
+    "brand": "Anycubic",
+    "printers": [
+      { "name": "Anycubic Kobra 2", "x": 220, "y": 220, "z": 250, "color": "#f07167" },
+      { "name": "Anycubic Kobra 3 Combo", "x": 250, "y": 250, "z": 260, "color": "#5f0f40" },
+      { "name": "Anycubic Kobra 3 Max", "x": 420, "y": 420, "z": 500, "color": "#e36414" }
+    ]
+  },
+  {
+    "brand": "Bambu Lab",
+    "printers": [
+      { "name": "Bambu X1 Carbon", "x": 256, "y": 256, "z": 256, "color": "#ff6f61" },
+      { "name": "Bambu P1S", "x": 256, "y": 256, "z": 256, "color": "#5adbb5" },
+      { "name": "Bambu P1P", "x": 256, "y": 256, "z": 256, "color": "#f4c95d" },
+      { "name": "Bambu P2S", "x": 256, "y": 256, "z": 256, "color": "#8a6be9" },
+      { "name": "Bambu A1", "x": 256, "y": 256, "z": 256, "color": "#3fa7d6" },
+      { "name": "Bambu A1 Mini", "x": 180, "y": 180, "z": 180, "color": "#ff9f1c" },
+      { "name": "Bambu Lab H2C", "x": 325, "y": 320, "z": 325, "color": "#00a676" },
+      { "name": "Bambu Lab H2D", "x": 350, "y": 320, "z": 325, "color": "#ff6b35" }
+    ]
+  },
+  {
+    "brand": "Creality",
+    "printers": [
+      { "name": "Creality Ender 3 V3 KE", "x": 220, "y": 220, "z": 240, "color": "#118ab2" },
+      { "name": "Creality Ender 3 V3 SE", "x": 220, "y": 220, "z": 250, "color": "#06aed5" },
+      { "name": "Creality K1", "x": 220, "y": 220, "z": 250, "color": "#9ef01a" },
+      { "name": "Creality K1 Max", "x": 300, "y": 300, "z": 300, "color": "#ffa69e" },
+      { "name": "Creality K2 Plus", "x": 350, "y": 350, "z": 350, "color": "#ff6b6b" },
+      { "name": "Creality Hi Combo", "x": 260, "y": 260, "z": 300, "color": "#8338ec" }
+    ]
+  },
+  {
+    "brand": "Elegoo",
+    "printers": [
+      { "name": "Elegoo Neptune 4", "x": 225, "y": 225, "z": 265, "color": "#a7c957" },
+      { "name": "Elegoo Neptune 4 Pro", "x": 225, "y": 225, "z": 265, "color": "#ffc8dd" },
+      { "name": "Elegoo Neptune 4 Plus", "x": 320, "y": 320, "z": 385, "color": "#80ed99" },
+      { "name": "Elegoo Neptune 4 Max", "x": 420, "y": 420, "z": 480, "color": "#ffb4a2" },
+      { "name": "Elegoo Centauri Carbon", "x": 256, "y": 256, "z": 256, "color": "#64dfdf" }
+    ]
+  },
+  {
+    "brand": "FLSun",
+    "printers": [
+      { "name": "FLSun V400", "x": 300, "y": 300, "z": 410, "color": "#5a189a" },
+      { "name": "FLSun T1 Max", "x": 320, "y": 320, "z": 430, "color": "#ff5d8f" }
+    ]
+  },
+  {
+    "brand": "Flashforge",
+    "printers": [
+      { "name": "Flashforge Adventurer 5M Pro", "x": 220, "y": 220, "z": 220, "color": "#4895ef" }
+    ]
+  },
+  {
+    "brand": "Prusa",
+    "printers": [
+      { "name": "Prusa MK4", "x": 250, "y": 210, "z": 220, "color": "#ef476f" },
+      { "name": "Prusa MINI+", "x": 180, "y": 180, "z": 180, "color": "#ffd166" },
+      { "name": "Prusa XL (5-head)", "x": 360, "y": 360, "z": 360, "color": "#06d6a0" }
+    ]
+  },
+  {
+    "brand": "Snapmaker",
+    "printers": [
+      { "name": "Snapmaker U1", "x": 270, "y": 270, "z": 270, "color": "#2d5a27" }
+    ]
+  },
+  {
+    "brand": "Sovol",
+    "printers": [
+      { "name": "Sovol SV08", "x": 220, "y": 220, "z": 250, "color": "#fee440" },
+      { "name": "Sovol SV08 Max", "x": 400, "y": 400, "z": 500, "color": "#30c5ff" }
+    ]
+  },
+  {
+    "brand": "Voron",
+    "printers": [
+      { "name": "Voron 0 (120)", "x": 120, "y": 120, "z": 120, "color": "#9d4edd" },
+      { "name": "Voron 2.4 R2 (300)", "x": 300, "y": 300, "z": 300, "color": "#00f5d4" },
+      { "name": "Voron Trident (250)", "x": 250, "y": 250, "z": 250, "color": "#f77f00" }
+    ]
+  }
+]
