@@ -1,0 +1,314 @@
+Build a static, client-side 3D printer build-volume comparer using HTML, CSS, and vanilla JS with Three.js (ES modules via CDN). Key requirements:
+
+- Units: 1 Three.js unit = 1 mm. Z is up; boxes rest on the build plate. All printers share the same world space.
+- Data: Load grouped printers from `data/printers.json` (brand, name, x, y, z, color). Use provided colors; support custom printers (name + X/Y/Z + color) with replace-by-name behavior.
+- Visualization: Translucent box + outline per printer; labels show name and hover tooltips show dimensions/volume (liters). Benchy and Voron STL sample models included (`assets/3DBenchy.stl`, `assets/Voron_Design_Cube_v7(R2).stl`).
+- Modes: 3D orbit with gizmo; 2D top-view toggle flattens boxes, locks camera top-down, keeps labels inside boxes with anti-overlap; scroll in 2D returns to 3D.
+- Controls/UI: Vertical stack of buttons (Settings, Theme toggle, 2D/3D). Sidebar with search/filter list and checkboxes. Collapsible custom form. Settings panel toggles axes, Benchy visibility/color, sample model, and align mode (center overlap, corner overlap, row sorted small→large). Benchy centers on the smallest visible printer.
+- Alignment/placement: Options above; auto recenter scene/grid/camera after changes. Grid helper and axis arrows. Labels re-sync on mode changes.
+- Help: “?” opens modal with usage info. Quick guide overlay on first load (skippable; remembers dismissal).
+- Responsive: Sidebar overlays on mobile/tablet; viewport fills screen. Controls/gizmo anchored with safe margins. Settings panel sized/positioned to avoid overlapping controls; dropdowns constrained.
+- Performance: Cap renderer pixel ratio on touch (~1.5). Disable hover logic on touch; keep orbit/pan/zoom smooth.
+- Theming: Dark/light theme toggle; labels restyle per theme.
+- Files: `index.html` (layout/UI), `scripts/main.js` (scene + logic), `styles/style.css` (styling), `data/printers.json` (printer specs), assets STLs.
+
+//
+
+# 3D Printer Build Volume Comparer
+## Prompt & Code Review Guide
+
+Tài liệu này gồm:
+1. **Prompt rút gọn** – dùng cho model nhỏ để sinh code
+2. **Checklist review code** – dùng để kiểm tra chất lượng, tính đúng và khả năng bảo trì
+
+---
+
+# PART 1 — COMPACT PROMPT (FOR SMALL MODELS)
+
+## Goal
+Build a **static, client-side 3D printer build-volume comparer** using  
+**HTML, CSS, vanilla JavaScript + Three.js (ES modules via CDN)**.
+
+No backend. No frameworks.
+
+---
+
+## Core Rules
+- **1 unit = 1 mm**
+- **Z is up**
+- All printer volumes rest on **Z = 0**
+- All printers share the **same world space**
+- Each printer is rendered as:
+  - Translucent box
+  - Thin outline
+
+---
+
+## Data
+- Load from `data/printers.json`
+- Schema:
+{ brand, name, x, y, z, color }
+
+yaml
+Sao chép mã
+- Group by brand
+- Custom printers allowed (name + X/Y/Z + color)
+- **Replace-by-name** if names collide (deterministic)
+
+---
+
+## Minimal Architecture (Required)
+index.html
+styles/style.css
+data/printers.json
+scripts/
+  main.js            // composition only
+  core/scene.js      // renderer, camera, resize
+  printers/store.js  // data + replace-by-name
+  printers/mesh.js   // box + outline
+  printers/layout.js // alignment algorithms (pure)
+  ui/modes.js        // 2D / 3D toggle
+  ui/labels.js       // DOM labels + collision handling
+
+yaml
+Sao chép mã
+
+Rules:
+- No monolithic `main.js`
+- Layout/math logic must be **pure functions**
+- UI must not manipulate Three.js meshes directly
+
+---
+
+## Alignment Modes
+- **Center overlap**: all at (0,0)
+- **Corner overlap**: align min X/Y
+- **Row layout**:
+  - Sort by **volume ascending**
+  - Place along +X
+  - Fixed gap (e.g. 10mm)
+- Bottom face always at Z = 0
+- Deterministic & stable across toggles
+
+---
+
+## 2D / 3D Modes
+### 3D
+- OrbitControls enabled
+- Full rotation
+- Labels float above boxes
+
+### 2D
+- Camera locked top-down
+- Height ignored (footprint only)
+- Rotation disabled (pan + zoom allowed)
+- Scroll exits back to 3D
+
+---
+
+## Labels
+- HTML DOM labels
+- Always inside printer footprint
+- Show name
+- Hover tooltip:
+  - X × Y × Z (mm)
+  - Volume (liters)
+- **Screen-space anti-overlap**
+- Deterministic, throttled updates
+
+---
+
+## Benchy & Samples
+- Include:
+  - `assets/3DBenchy.stl`
+  - `assets/Voron_Design_Cube_v7(R2).stl`
+- Load STL once, clone meshes
+- Benchy centers on **smallest visible printer**
+
+---
+
+## UI
+- Sidebar:
+  - Search
+  - Brand filter
+  - Visibility checkboxes
+  - Collapsible custom printer form
+- Buttons:
+  - Settings
+  - Theme toggle (light/dark)
+  - 2D / 3D toggle
+
+---
+
+## Performance & Mobile
+- Cap pixel ratio (~1.5) on touch devices
+- Disable hover on touch
+- Smooth pan / zoom
+
+---
+
+## Non-Goals
+- No frameworks
+- No backend
+- No CSS libraries
+- No monolithic files
+
+---
+
+## Output Expectations
+- Modular, readable code
+- Deterministic behavior
+- Clear separation: state, UI, geometry, rendering
+
+---
+
+# PART 2 — CODE REVIEW CHECKLIST
+
+Use checklist này để review code sinh ra từ AI hoặc PR.
+
+---
+
+## 1. Physical & World Model
+- [ ] 1 unit = 1 mm ở mọi nơi
+- [ ] Z là trục up (không rotate hack)
+- [ ] Mọi box chạm Z = 0
+- [ ] Không scale theo camera
+
+❌ Red flags:
+- `mesh.scale.set(...)`
+- Rotate cả scene để “đổi trục”
+
+---
+
+## 2. Data Integrity & Replace-by-Name
+- [ ] `printers.json` là source of truth
+- [ ] Custom printer replace đúng theo `name`
+- [ ] Không tạo bản sao trùng
+- [ ] Volume = x * y * z (mm³ → liters)
+
+❌ Red flags:
+- Push thẳng vào array render
+- So sánh name không normalize
+
+---
+
+## 3. File Structure & Responsibility
+- [ ] `main.js` chỉ bootstrap + wire
+- [ ] Không layout/math trong `main.js`
+- [ ] UI không tạo mesh
+- [ ] Layout ở file riêng
+
+❌ Red flags:
+- `if (mode === '2d')` rải khắp code
+- Three.js logic trong UI
+
+---
+
+## 4. Alignment Algorithms
+- [ ] Center overlap đúng (0,0)
+- [ ] Corner overlap đúng min X/Y
+- [ ] Row layout:
+  - [ ] Sort volume ascending
+  - [ ] Axis +X
+  - [ ] Fixed gap
+- [ ] Toggle không làm đổi thứ tự
+
+❌ Red flags:
+- Dựa index array hiện tại
+- Layout đổi mỗi lần click
+
+---
+
+## 5. 2D / 3D Semantics
+### 3D
+- [ ] Orbit rotate hoạt động
+- [ ] Labels nổi trên box
+
+### 2D
+- [ ] Camera top-down
+- [ ] Không scale Z về 0
+- [ ] Pan + zoom OK
+- [ ] Scroll → quay lại 3D
+
+❌ Red flags:
+- Perspective camera cho 2D
+- Scale geometry để giả lập 2D
+
+---
+
+## 6. Label System (Critical)
+- [ ] Labels là DOM
+- [ ] Position = project(world → screen)
+- [ ] Anti-overlap:
+  - [ ] Screen-space
+  - [ ] Deterministic
+  - [ ] Không jitter
+- [ ] Tooltip đúng nội dung
+
+❌ Red flags:
+- Check overlap bằng world coords
+- Update labels mỗi frame
+
+---
+
+## 7. Benchy & STL
+- [ ] STL load 1 lần
+- [ ] Clone mesh khi dùng
+- [ ] Benchy center trên printer nhỏ nhất visible
+- [ ] Không vượt footprint
+
+❌ Red flags:
+- Reload STL mỗi toggle
+- Scale STL bằng magic number
+
+---
+
+## 8. State Management
+- [ ] Có 1 state object rõ ràng
+- [ ] UI đọc từ state, không từ DOM
+- [ ] Update theo delta
+
+❌ Red flags:
+- DOM là source of truth
+- Query checkbox khắp nơi
+
+---
+
+## 9. Performance
+- [ ] Pixel ratio cap trên touch
+- [ ] Hover disabled trên touch
+- [ ] Label update throttle
+- [ ] Camera move không lag
+
+---
+
+## 10. UX & Responsiveness
+- [ ] Sidebar overlay đúng trên mobile
+- [ ] Viewport fill screen
+- [ ] Controls không chồng nhau
+- [ ] Theme áp dụng cho grid, labels, panels
+
+---
+
+## 11. Code Quality Smell Test
+- [ ] Hàm < ~40 dòng
+- [ ] Biến có đơn vị rõ ràng (`mm`, `mm3`)
+- [ ] Không magic numbers
+- [ ] Không comment để “giải thích hack”
+
+---
+
+## 12. Final Verdict
+- [ ] Toggle không làm scene drift
+- [ ] Refresh → state đúng
+- [ ] Add/remove printer không vỡ layout
+- [ ] Code refactor được, không sợ
+
+---
+
+## Usage Notes
+- Model nhỏ → check mục **1–6**
+- Trước merge → check **1–12**
+- Fail ≥ 2 mục trong 1 section → yêu cầu refactor
+
+---
